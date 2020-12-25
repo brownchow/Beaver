@@ -78,13 +78,15 @@ var serveCmd = &cobra.Command{
 
 			if !fs.FileExists(viper.GetString("app.log.output")) {
 				f, err := os.Create(viper.GetString("app.log.output"))
+
 				if err != nil {
 					panic(fmt.Sprintf(
 						"Error while creating log file [%s]: %s",
-						viper.GetString(fmt.Sprintf("%s.log.output", viper.GetString("role"))),
+						viper.GetString("app.log.output"),
 						err.Error(),
 					))
 				}
+
 				defer f.Close()
 			}
 		}
@@ -133,7 +135,6 @@ var serveCmd = &cobra.Command{
 
 		r.GET("/", controller.Index)
 		r.GET("/_health", controller.HealthCheck)
-		r.GET("/_node", controller.GetNodeInfo)
 		r.GET("/_metrics", controller.GetMetrics)
 
 		api := r.Group("/api")

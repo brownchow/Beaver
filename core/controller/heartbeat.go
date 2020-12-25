@@ -3,15 +3,3 @@
 // license that can be found in the LICENSE file.
 
 package controller
-
-import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-)
-
-// GetNodeInfo controller
-func GetNodeInfo(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"status": "ok",
-	})
-}

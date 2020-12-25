@@ -7,3 +7,17 @@ package cluster
 // This module used to broadcast messages to all cluster nodes
 // By default if the node is part of a cluster, it will join
 // RabbitMQ
+
+type Broadcast struct {
+}
+
+type Message struct {
+}
+
+func (b *Broadcast) Publish(m *Message) error {
+
+}
+
+func (b *Broadcast) Listen() {
+
+}
