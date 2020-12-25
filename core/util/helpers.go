@@ -19,9 +19,9 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/dgrijalva/jwt-go"
 )
 
 // InArray check if value is on array
@@ -289,4 +289,3 @@ func GenerateJWTToken(data string, timestamp int64, secret string) (string, erro
 
 	return tokenString, nil
 }
-

@@ -148,11 +148,6 @@ var serveCmd = &cobra.Command{
 			api.DELETE("/client/:id", controller.DeleteClientByID)
 			api.PUT("/client/:id/unsubscribe", controller.Unsubscribe)
 			api.PUT("/client/:id/subscribe", controller.Subscribe)
-
-			api.GET("/config/:key", controller.GetConfigByKey)
-			api.POST("/config", controller.CreateConfig)
-			api.DELETE("/config/:key", controller.DeleteConfigByKey)
-			api.PUT("/config/:key", controller.UpdateConfigByKey)
 		}
 
 		socket := &controller.Websocket{}
