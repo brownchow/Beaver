@@ -15,7 +15,7 @@ type Message struct {
 }
 
 func (b *Broadcast) Publish(m *Message) error {
-
+	return nil
 }
 
 func (b *Broadcast) Listen() {

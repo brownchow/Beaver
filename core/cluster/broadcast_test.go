@@ -10,8 +10,8 @@ import (
 	"github.com/franela/goblin"
 )
 
-// TestCluster test cases
-func TestCluster(t *testing.T) {
+// TestBroadcast test cases
+func TestBroadcast(t *testing.T) {
 	g := goblin.Goblin(t)
 
 	g.Describe("#Func", func() {
@@ -24,7 +24,7 @@ func TestCluster(t *testing.T) {
 			}
 
 			for _, tt := range tests {
-				g.Assert(Sum(tt.input)).Equal(tt.wantOutput)
+				g.Assert(tt.input).Equal(tt.wantOutput)
 			}
 		})
 	})

@@ -43,10 +43,10 @@ func TestValidator(t *testing.T) {
 				max        int
 				wantResult bool
 			}{
-				{"abdg-shdt", 1, 9, true},
-				{"abdg-shdtki", 1, 9, false},
-				{"abdG-shdt", 1, 9, false},
-				{"ab78-s98t", 1, 9, true},
+				{"abdg_shdt", 1, 9, true},
+				{"abdg_shdtki", 1, 9, false},
+				{"abdG_shdt", 1, 9, false},
+				{"ab78_s98t", 1, 9, true},
 				{"", 1, 9, false},
 			}
 
@@ -64,10 +64,10 @@ func TestValidator(t *testing.T) {
 				max        int
 				wantResult bool
 			}{
-				{[]string{"abdg-shdt", "ab78-s98t"}, 1, 9, true},
-				{[]string{"abdg-shdt", "ab78-s98t", "abdg-shdtki"}, 1, 9, false},
-				{[]string{"abdg-shdt", "ab78-s98t", ""}, 1, 9, false},
-				{[]string{"abdg-shdt", "ab78-s98t", "abdG-shdt"}, 1, 9, false},
+				{[]string{"abdg_shdt", "ab78_s98t"}, 1, 9, true},
+				{[]string{"abdg_shdt", "ab78_s98t", "abdg_shdtki"}, 1, 9, false},
+				{[]string{"abdg_shdt", "ab78_s98t", ""}, 1, 9, false},
+				{[]string{"abdg_shdt", "ab78_s98t", "abdG_shdt"}, 1, 9, false},
 			}
 
 			for _, tt := range tests {

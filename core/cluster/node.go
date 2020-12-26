@@ -5,6 +5,10 @@
 package cluster
 
 import (
+	"fmt"
+	"os"
+	"strings"
+
 	"github.com/clivern/beaver/core/driver"
 	"github.com/clivern/beaver/core/util"
 
@@ -18,6 +22,8 @@ type Node struct {
 
 // Init init node object
 func (n *Node) Init() error {
+	var err error
+
 	n.Driver, err = driver.NewEtcdDriver()
 
 	if err != nil {
@@ -28,7 +34,7 @@ func (n *Node) Init() error {
 }
 
 // Alive report the node as live to etcd
-func (n *Node) Alive(seconds int) error {
+func (n *Node) Alive(seconds int64) error {
 
 	hostname, err := n.GetHostname()
 
@@ -38,28 +44,36 @@ func (n *Node) Alive(seconds int) error {
 
 	key := fmt.Sprintf(
 		"%s/node/%s__%s",
-		viper.GetString("database.etcd.databaseName"),
+		viper.GetString("app.database.etcd.databaseName"),
 		hostname,
 		util.GenerateUUID4(),
 	)
 
-	leaseId, err := n.Driver.CreateLease(seconds)
+	leaseID, err := n.Driver.CreateLease(seconds)
 
 	if err != nil {
 		return err
 	}
 
-	err = n.Driver.PutWithLease(key, "alive", leaseId)
+	err = n.Driver.PutWithLease(fmt.Sprintf("%s/state", key), "alive", leaseID)
 
 	if err != nil {
 		return err
 	}
 
-	err = n.Driver.RenewLease(leaseId)
+	err = n.Driver.PutWithLease(fmt.Sprintf("%s/url", key), viper.GetString("app.url"), leaseID)
 
 	if err != nil {
 		return err
 	}
+
+	err = n.Driver.RenewLease(leaseID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetHostname gets the hostname
