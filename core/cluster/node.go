@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/clivern/beaver/core/driver"
-	"github.com/clivern/beaver/core/util"
 
 	"github.com/spf13/viper"
 )
@@ -46,7 +45,7 @@ func (n *Node) Alive(seconds int64) error {
 		"%s/node/%s__%s",
 		viper.GetString("app.database.etcd.databaseName"),
 		hostname,
-		util.GenerateUUID4(),
+		viper.GetString("app.name"),
 	)
 
 	leaseID, err := n.Driver.CreateLease(seconds)

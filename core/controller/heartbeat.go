@@ -18,6 +18,8 @@ func Heartbeat() {
 	node := &cluster.Node{}
 	err := node.Init()
 
+	log.Info(`Start heartbeat daemon`)
+
 	if err != nil {
 		panic(fmt.Sprintf(
 			"Error while connecting to etcd: %s",

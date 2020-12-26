@@ -119,6 +119,8 @@ var serveCmd = &cobra.Command{
 			log.SetFormatter(&log.TextFormatter{})
 		}
 
+		viper.SetDefault("app.name", util.GenerateUUID4())
+
 		r := gin.Default()
 
 		r.Use(middleware.Correlation())

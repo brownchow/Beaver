@@ -6,8 +6,11 @@ package driver
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
+
+	"github.com/clivern/beaver/core/util"
 
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
@@ -133,6 +136,33 @@ func (e *Etcd) RenewLease(leaseID clientv3.LeaseID) error {
 	}
 
 	return nil
+}
+
+// GetKeys gets a record sub keys
+func (e *Etcd) GetKeys(key string) ([]string, error) {
+	result := []string{}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(viper.GetInt("app.database.etcd.timeout"))*time.Second)
+
+	resp, err := e.Client.Get(ctx, key, clientv3.WithPrefix())
+
+	defer cancel()
+
+	if err != nil {
+		return result, err
+	}
+
+	for _, ev := range resp.Kvs {
+		sub := strings.Replace(string(ev.Key), util.EnsureTrailingSlash(key), "", -1)
+		subKeys := strings.Split(sub, "/")
+		newKey := fmt.Sprintf("%s%s", util.EnsureTrailingSlash(key), subKeys[0])
+
+		if !util.InArray(newKey, result) {
+			result = append(result, newKey)
+		}
+	}
+
+	return result, nil
 }
 
 // Close closes the etcd connection

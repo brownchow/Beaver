@@ -5,7 +5,11 @@
 package cluster
 
 import (
+	"fmt"
+
 	"github.com/clivern/beaver/core/driver"
+
+	"github.com/spf13/viper"
 )
 
 // Stats type
@@ -28,7 +32,19 @@ func (n *Stats) Init() error {
 
 // GetTotalNodes
 func (n *Stats) GetTotalNodes() (int, error) {
-	return 0, nil
+
+	key := fmt.Sprintf(
+		"%s/node",
+		viper.GetString("app.database.etcd.databaseName"),
+	)
+
+	keys, err := n.Driver.GetKeys(key)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(keys), nil
 }
 
 // GetTotalChannels

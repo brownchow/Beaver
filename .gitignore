@@ -17,7 +17,8 @@ beaver
 # Ignore vendor and run dep ensure
 vendor
 
-config.test.yml
+config.prod.yml
+config.dev.yml
 coverage.html
 cover.out
 
