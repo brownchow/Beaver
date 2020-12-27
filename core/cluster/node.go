@@ -60,6 +60,12 @@ func (n *Node) Alive(seconds int64) error {
 		return err
 	}
 
+	err = n.db.PutWithLease(fmt.Sprintf("%s/load", key), "0", leaseID)
+
+	if err != nil {
+		return err
+	}
+
 	err = n.db.RenewLease(leaseID)
 
 	if err != nil {

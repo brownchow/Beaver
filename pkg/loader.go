@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/drone/envsubst"
 	"github.com/spf13/viper"
 )
 
@@ -40,6 +41,17 @@ func LoadConfigs(path string) error {
 		return err
 	}
 
+	data1, err := envsubst.EvalEnv(string(data))
+
+	if err != nil {
+		return err
+	}
+
 	viper.SetConfigType("yaml")
-	return viper.ReadConfig(bytes.NewBuffer([]byte(data)))
+
+	viper.ReadConfig(bytes.NewBuffer([]byte(data1)))
+
+	viper.SetDefault("app.name", "x-x-x-x")
+
+	return nil
 }
