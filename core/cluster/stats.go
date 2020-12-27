@@ -26,14 +26,14 @@ func NewStats(db driver.Database) *Stats {
 }
 
 // GetTotalNodes
-func (n *Stats) GetTotalNodes() (int, error) {
+func (s *Stats) GetTotalNodes() (int, error) {
 
 	key := fmt.Sprintf(
 		"%s/node",
 		viper.GetString("app.database.etcd.databaseName"),
 	)
 
-	keys, err := n.db.GetKeys(key)
+	keys, err := s.db.GetKeys(key)
 
 	if err != nil {
 		return 0, err
@@ -43,16 +43,35 @@ func (n *Stats) GetTotalNodes() (int, error) {
 }
 
 // GetTotalChannels
-func (n *Stats) GetTotalChannels() (int, error) {
-	return 0, nil
+func (s *Stats) GetTotalChannels() (int, error) {
+
+	key := fmt.Sprintf(
+		"%s/channel",
+		viper.GetString("app.database.etcd.databaseName"),
+	)
+
+	keys, err := s.db.GetKeys(key)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(keys), nil
 }
 
 // GetTotalClients
-func (n *Stats) GetTotalClients() (int, error) {
-	return 0, nil
-}
+func (s *Stats) GetTotalClients() (int, error) {
 
-// GetTotalConnectedClients
-func (n *Stats) GetTotalConnectedClients() (int, error) {
-	return 0, nil
+	key := fmt.Sprintf(
+		"%s/client",
+		viper.GetString("app.database.etcd.databaseName"),
+	)
+
+	keys, err := s.db.GetKeys(key)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(keys), nil
 }

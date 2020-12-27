@@ -15,9 +15,9 @@ import (
 	"go.etcd.io/etcd/clientv3"
 )
 
-// TestNode test cases
-func TestNode(t *testing.T) {
-	// Load Configs
+// TestNodeAlive test cases
+func TestNodeAlive(t *testing.T) {
+
 	baseDir := pkg.GetBaseDir("cache")
 	pkg.LoadConfigs(fmt.Sprintf("%s/config.dist.yml", baseDir))
 
@@ -52,6 +52,15 @@ func TestNode(t *testing.T) {
 			}
 		})
 	})
+}
+
+// TestNodeGetHostname test cases
+func TestNodeGetHostname(t *testing.T) {
+
+	baseDir := pkg.GetBaseDir("cache")
+	pkg.LoadConfigs(fmt.Sprintf("%s/config.dist.yml", baseDir))
+
+	g := goblin.Goblin(t)
 
 	g.Describe("#Node.GetHostname", func() {
 		g.It("It should satisfy all provided test cases", func() {
