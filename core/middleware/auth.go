@@ -21,8 +21,8 @@ func Auth() gin.HandlerFunc {
 
 		if strings.Contains(path, "/api/") {
 			apiKey := c.GetHeader("x-api-key")
-			if viper.GetString("api.key") != "" &&
-				apiKey != viper.GetString("api.key") {
+			if viper.GetString("app.api.key") != "" &&
+				apiKey != viper.GetString("app.api.key") {
 				log.WithFields(log.Fields{
 					"correlation_id": c.Request.Header.Get("X-Correlation-ID"),
 					"http_method":    method,
