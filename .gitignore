@@ -24,6 +24,4 @@ cover.out
 
 dist
 
-etcd-v3.4.14-darwin-amd64.zip
-etcd-v3.4.14-darwin-amd64
-default.etcd
+cache
