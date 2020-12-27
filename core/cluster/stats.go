@@ -14,20 +14,15 @@ import (
 
 // Stats type
 type Stats struct {
-	Driver *driver.Etcd
+	db driver.Database
 }
 
-// Init init node object
-func (n *Stats) Init() error {
-	var err error
+// NewStats creates a stats instance
+func NewStats(db driver.Database) *Stats {
+	result := new(Stats)
+	result.db = db
 
-	n.Driver, err = driver.NewEtcdDriver()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return result
 }
 
 // GetTotalNodes
@@ -38,7 +33,7 @@ func (n *Stats) GetTotalNodes() (int, error) {
 		viper.GetString("app.database.etcd.databaseName"),
 	)
 
-	keys, err := n.Driver.GetKeys(key)
+	keys, err := n.db.GetKeys(key)
 
 	if err != nil {
 		return 0, err

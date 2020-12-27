@@ -13,22 +13,25 @@ import (
 // TestEtcd
 func TestEtcd(t *testing.T) {
 	g := goblin.Goblin(t)
-	e := &EtcdMock{}
+	e := new(EtcdMock)
 
-	e.On("DoSomething", 1).Return(true, nil)
+	e.On("Get", "parent/child").Return(
+		map[string]string{"foo": "foo", "bar": "bar"},
+		nil,
+	)
 
-	g.Describe("#EtcdMock.DoSomething", func() {
+	g.Describe("#EtcdMock.Get", func() {
 		g.It("It should satisfy all provided test cases", func() {
 			var tests = []struct {
-				arg        int
-				wantResult bool
+				arg        string
+				wantResult map[string]string
 				wantError  bool
 			}{
-				{1, true, false},
+				{"parent/child", map[string]string{"foo": "foo", "bar": "bar"}, false},
 			}
 
 			for _, tt := range tests {
-				result, err := e.DoSomething(tt.arg)
+				result, err := e.Get(tt.arg)
 				g.Assert(result).Equal(tt.wantResult)
 				g.Assert(err != nil).Equal(tt.wantError)
 			}

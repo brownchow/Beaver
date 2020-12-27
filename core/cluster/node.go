@@ -16,25 +16,19 @@ import (
 
 // Node type
 type Node struct {
-	Driver *driver.Etcd
+	db driver.Database
 }
 
-// Init init node object
-func (n *Node) Init() error {
-	var err error
+// NewNode creates a node instance
+func NewNode(db driver.Database) *Node {
+	result := new(Node)
+	result.db = db
 
-	n.Driver, err = driver.NewEtcdDriver()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return result
 }
 
 // Alive report the node as live to etcd
 func (n *Node) Alive(seconds int64) error {
-
 	hostname, err := n.GetHostname()
 
 	if err != nil {
@@ -48,25 +42,25 @@ func (n *Node) Alive(seconds int64) error {
 		viper.GetString("app.name"),
 	)
 
-	leaseID, err := n.Driver.CreateLease(seconds)
+	leaseID, err := n.db.CreateLease(seconds)
 
 	if err != nil {
 		return err
 	}
 
-	err = n.Driver.PutWithLease(fmt.Sprintf("%s/state", key), "alive", leaseID)
+	err = n.db.PutWithLease(fmt.Sprintf("%s/state", key), "alive", leaseID)
 
 	if err != nil {
 		return err
 	}
 
-	err = n.Driver.PutWithLease(fmt.Sprintf("%s/url", key), viper.GetString("app.url"), leaseID)
+	err = n.db.PutWithLease(fmt.Sprintf("%s/url", key), viper.GetString("app.url"), leaseID)
 
 	if err != nil {
 		return err
 	}
 
-	err = n.Driver.RenewLease(leaseID)
+	err = n.db.RenewLease(leaseID)
 
 	if err != nil {
 		return err

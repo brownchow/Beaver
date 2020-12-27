@@ -9,16 +9,16 @@ import (
 	"time"
 
 	"github.com/clivern/beaver/core/cluster"
+	"github.com/clivern/beaver/core/driver"
 
 	log "github.com/sirupsen/logrus"
 )
 
 // Heartbeat node heartbeat
 func Heartbeat() {
-	node := &cluster.Node{}
-	err := node.Init()
+	db := driver.NewEtcdDriver()
 
-	log.Info(`Start heartbeat daemon`)
+	err := db.Connect()
 
 	if err != nil {
 		panic(fmt.Sprintf(
@@ -26,6 +26,10 @@ func Heartbeat() {
 			err.Error(),
 		))
 	}
+
+	node := cluster.NewNode(db)
+
+	log.Info(`Start heartbeat daemon`)
 
 	for {
 		err := node.Alive(5)
