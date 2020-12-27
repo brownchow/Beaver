@@ -42,11 +42,13 @@ func TestNodeAlive(t *testing.T) {
 				e := new(driver.EtcdMock)
 				n := NewNode(e)
 
+				result, _ := n.GetHostname()
+
 				e.On("CreateLease", int64(tt.input)).Return(clientv3.LeaseID(1234567), tt.mockReturn)
 				e.On("RenewLease", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
-				e.On("PutWithLease", "beaver_v2/node/clivern-2.local__x-x-x-x/state", "alive", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
-				e.On("PutWithLease", "beaver_v2/node/clivern-2.local__x-x-x-x/url", "http://127.0.0.1:8080", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
-				e.On("PutWithLease", "beaver_v2/node/clivern-2.local__x-x-x-x/load", "0", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
+				e.On("PutWithLease", fmt.Sprintf("beaver_v2/node/%s__x-x-x-x/state", result), "alive", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
+				e.On("PutWithLease", fmt.Sprintf("beaver_v2/node/%s__x-x-x-x/url", result), "http://127.0.0.1:8080", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
+				e.On("PutWithLease", fmt.Sprintf("beaver_v2/node/%s__x-x-x-x/load", result), "0", clientv3.LeaseID(1234567)).Return(tt.mockReturn)
 
 				g.Assert(n.Alive(tt.input) != nil).Equal(tt.wantError)
 			}
